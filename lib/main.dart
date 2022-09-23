@@ -21,7 +21,39 @@ class _HomeState extends State<Home> {
   List _toDoList = [];
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Lista de Tarefas"),
+        backgroundColor: Colors.lightBlueAccent,
+        centerTitle: true,
+      ),
+      body: Column(
+        children: [
+          Container(
+            padding: const EdgeInsets.fromLTRB(17.0, 1.0, 7.0, 1.0),
+            child: Row(
+              // ignore: prefer_const_literals_to_create_immutables
+              children: [
+                const Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                        labelText: "Nova tarefa",
+                        labelStyle: TextStyle(color: Colors.lightBlueAccent)),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.lightBlueAccent,
+                      textStyle: const TextStyle(color: Colors.white)),
+                  onPressed: () {},
+                  child: const Text("Add"),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 
   Future<File> _getFile() async {
