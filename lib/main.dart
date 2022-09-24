@@ -18,7 +18,18 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List _toDoList = [];
+  final _toDoControlador = TextEditingController();
+  final List _toDoList = [];
+  void _addToDo() {
+    setState(() {
+      Map<String, dynamic> novoToDo = {};
+      novoToDo['title'] = _toDoControlador.text;
+      _toDoControlador.text = '';
+      novoToDo['ok'] = false;
+      _toDoList.add(novoToDo);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,9 +45,10 @@ class _HomeState extends State<Home> {
             child: Row(
               // ignore: prefer_const_literals_to_create_immutables
               children: [
-                const Expanded(
+                Expanded(
                   child: TextField(
-                    decoration: InputDecoration(
+                    controller: _toDoControlador,
+                    decoration: const InputDecoration(
                         labelText: "Nova tarefa",
                         labelStyle: TextStyle(color: Colors.lightBlueAccent)),
                   ),
@@ -45,12 +57,30 @@ class _HomeState extends State<Home> {
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightBlueAccent,
                       textStyle: const TextStyle(color: Colors.white)),
-                  onPressed: () {},
+                  onPressed: _addToDo,
                   child: const Text("Add"),
                 )
               ],
             ),
-          )
+          ),
+          Expanded(
+            child: ListView.builder(
+                padding: const EdgeInsets.only(top: 10.0),
+                itemCount: _toDoList.length,
+                itemBuilder: (context, index) {
+                  return CheckboxListTile(
+                    title: Text(
+                      _toDoList[index]['title'],
+                    ),
+                    value: _toDoList[index]['ok'],
+                    secondary: CircleAvatar(
+                      child: Icon(
+                          _toDoList[index]['ok'] ? Icons.check : Icons.error),
+                    ),
+                    onChanged: (bool? value) {},
+                  );
+                }),
+          ),
         ],
       ),
     );
