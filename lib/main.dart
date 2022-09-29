@@ -21,6 +21,9 @@ class _HomeState extends State<Home> {
   final _toDoControlador = TextEditingController();
   List _toDoList = [];
 
+  late Map _ultimoRemovido;
+  late int _ultimoRemovidoPos;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -116,6 +119,28 @@ class _HomeState extends State<Home> {
           });
         },
       ),
+      onDismissed: (direction) {
+        setState(() {
+          _ultimoRemovido = Map.from(_toDoList[index]);
+          _ultimoRemovidoPos = index;
+          _toDoList.removeAt(index);
+          _saveData();
+          final snack = SnackBar(
+            content: Text("Tarefa ${_ultimoRemovido['title']} removida!"),
+            action: SnackBarAction(
+              label: 'Desfazer',
+              onPressed: () {
+                setState(() {
+                  _toDoList.insert(_ultimoRemovidoPos, _ultimoRemovido);
+                  _saveData();
+                });
+              },
+            ),
+            duration: Duration(seconds: 2),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snack);
+        });
+      },
     );
   }
 
